@@ -1,0 +1,154 @@
+-- Question 1
+-- 504 Products
+
+-- Question 2
+Select Count(*) AS [Subcategory Products]
+From Production.Product p
+Where p.ProductSubcategoryID is not null
+
+-- Question 3
+Select p.ProductSubcategoryID, Count(*)
+From Production.Product p
+Where p.ProductSubcategoryID is not null
+Group By p.ProductSubcategoryID
+
+-- Question 4
+Select Count(*) AS [Subcategory Products]
+From Production.Product p
+Where p.ProductSubcategoryID is null
+
+-- Question 5
+Select Sum(pin.Quantity) AS [Total Products]
+From Production.ProductInventory pin
+
+-- Question 6
+Select pin.ProductID, Sum(pin.Quantity) AS TheSum
+From Production.ProductInventory pin
+Where pin.LocationID = 40
+Group By pin.ProductID
+Having Sum(pin.Quantity) < 100
+
+-- Question 7
+Select pin.Shelf, pin.ProductID, Sum(pin.Quantity) AS TheSum
+From Production.ProductInventory pin
+Where pin.LocationID = 40
+Group By pin.Shelf, pin.ProductID
+Having Sum(pin.Quantity) < 100
+
+-- Question 8
+Select avg(pin.Quantity) as Average
+From Production.ProductInventory pin
+Where pin.LocationID = 10
+
+-- Question 9
+Select pin.ProductID, pin.Shelf, avg(pin.Quantity) as TheAverage
+From Production.ProductInventory pin
+Group By pin.ProductID, pin.Shelf
+
+-- Question 10
+Select pin.ProductID, pin.Shelf, avg(pin.Quantity) as TheAverage
+From Production.ProductInventory pin
+Where pin.Shelf <> 'N/A'
+Group By pin.ProductID, pin.Shelf
+
+-- Question 11
+Select p.Color, p.Class, Count(*)as TheCount, AVG(p.ListPrice) as AVGPrice
+From Production.Product p
+Where p.Color is not null and p.Class is not null
+Group By p.Color, p.Class
+
+-- Question 12
+Select cr.Name as Country, sp.Name as Province
+From person.CountryRegion cr inner join person.StateProvince sp
+On cr.CountryRegionCode = sp.CountryRegionCode
+
+-- Question 13
+Select cr.Name as Country, sp.Name as Province
+From person.CountryRegion cr inner join person.StateProvince sp
+On cr.CountryRegionCode = sp.CountryRegionCode
+Where cr.Name in ('Germany','Canada')
+
+-- Question 14
+Select p.ProductID, p.productname, o.orderdate
+From dbo.products p, dbo.[Order Details] od, dbo.orders o
+Where p.productid = od.productid and od.orderid = o.orderid
+and o.orderdate >= '1997-03-16'
+
+-- Question 15
+Select Count(*) as [Number of Orders], o.shippostalcode
+From dbo.orders o
+Where o.shippostalcode is not null
+Group By o.shippostalcode
+
+-- Question 16
+Select Count(*) as [Number of Orders], o.shippostalcode
+From dbo.orders o
+Where o.orderdate >= '1997-03-16' and o.shippostalcode is not null
+Group By o.shippostalcode
+
+-- Question 17
+Select c.city, count(*)
+From dbo.customers c
+Group By c.city
+
+-- Question 18
+Select c.city, count(*)
+From dbo.customers c
+Group By c.city
+Having Count(*) > 2
+
+-- Question 19
+Select c.contactname, o.orderdate
+From dbo.customers c inner join dbo.orders o
+On c.customerid = o.customerid
+Where o.orderdate > '1998-01-01'
+Order By o.orderdate
+
+-- Question 20
+Select c.contactname, o.orderdate
+From dbo.customers c inner join dbo.orders o
+On c.customerid = o.customerid
+Where o.orderdate = '1998-05-06'
+Order By o.orderdate
+
+-- Question 21
+Select c.contactname, Count(*) as TheCount
+From dbo.customers c inner join dbo.orders o
+On c.customerid = o.customerid
+Group By c.contactname
+
+-- Question 22
+Select c.contactname, Count(*) as TheCount
+From dbo.customers c inner join dbo.orders o
+On c.customerid = o.customerid
+Group By c.contactname
+Having Count(*) > 100
+
+-- Question 23
+Select sh.companyname, su.companyname
+From dbo.shippers sh, dbo.suppliers su
+
+-- Question 24
+Select o.orderdate, p.productname
+From dbo.products p, dbo.[Order Details] od, dbo.orders o
+Where p.productid = od.productid and od.orderid = o.orderid
+Order By o.OrderDate
+
+-- Question 25
+Select e1.EmployeeID,e1.FirstName, e2.FirstName ,e2.EmployeeID, e1.Title
+From dbo.employees e1, dbo.Employees e2
+Where e1.title = e2.title and e1.EmployeeID > e2.EmployeeID
+
+-- Question 26
+Select e.ReportsTo, Count(*) as TheCount
+From dbo.employees e
+Where ReportsTo is not null
+Group By e.ReportsTo
+Having Count(*) > 2 
+
+-- Question 27
+Select c.City, c.CompanyName, c.ContactName, 'Customers' as Relationship
+From Customers c
+UNION
+Select s.City, s.CompanyName, s.ContactName, 'Suppliers'
+From Suppliers s
